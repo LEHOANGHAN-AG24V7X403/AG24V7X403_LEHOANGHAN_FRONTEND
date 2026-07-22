@@ -31,6 +31,29 @@
             </label>
         </div>
 
+        <!-- Chọn Sở thích  -->
+        <div class="form-group">
+            <label class="d-block font-weight-bold">Sở thích:</label>
+            <div class="mt-2">
+                <div 
+                    v-for="hobby in hobbyOptions" 
+                    :key="hobby.id" 
+                    class="form-check mb-2"
+                >
+                    <input 
+                        type="checkbox" 
+                        class="form-check-input" 
+                        :id="hobby.id" 
+                        :value="hobby.label" 
+                        v-model="contactLocal.hobbies" 
+                    />
+                    <label :for="hobby.id" class="form-check-label ml-2">
+                        {{ hobby.label }}
+                    </label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <button class="btn btn-primary">Lưu</button>
             <button v-if="contactLocal._id" type="button" class="ml-2 btn btn-danger" @click="deleteContact">
@@ -77,10 +100,17 @@ export default {
                 ),
         });
         return {
-            // Chúng ta sẽ không muốn hiệu chỉnh props, nên tạo biến cục bộ
-            // contactLocal để liên kết với các input trên form
-            contactLocal: this.contact,
+            contactLocal: {
+                ...this.contact,
+                hobbies: this.contact.hobbies || []
+            },
             contactFormSchema,
+            hobbyOptions: [
+                { id: "hobby1", label: "Thể thao" },
+                { id: "hobby2", label: "Âm nhạc" },
+                { id: "hobby3", label: "Du lịch" },
+                { id: "hobby4", label: "Đọc sách" },
+            ]
         };
     },
     methods: {
@@ -88,13 +118,11 @@ export default {
             this.$emit("submit:contact", this.contactLocal);
         },
         deleteContact() {
-            // Lưu ý: Đối với MongoDB, thuộc tính định danh là _id thay vì id thông thường
             this.$emit("delete:contact", this.contactLocal._id || this.contactLocal.id);
         },
         Cancel() {
             const reply = window.confirm('You have unsaved changes! Do you want to leave?');
             if (!reply) {
-                // stay on the page if user clicks 'Cancel'
                 return false;
             }
             else this.$router.push({ name: "contactbook" });
@@ -105,5 +133,9 @@ export default {
 
 <style scoped>
 @import "@/assets/form.css";
-</style>
 
+form {
+    max-width: 450px;
+    margin: 0 auto;
+}
+</style>

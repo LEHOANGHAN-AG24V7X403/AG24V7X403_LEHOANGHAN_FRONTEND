@@ -29,6 +29,7 @@ export default {
             <i v-if="contact.favorite" class="fas fa-check"></i>
             <i v-else class="fas fa-times"></i>
         </div>
+        <!-- Hiển thị danh sách sở thích của liên hệ -->
         <div class="p-1">
             <strong>Sở thích:&nbsp;</strong>
             <span v-if="contact.hobbies && contact.hobbies.length > 0">
